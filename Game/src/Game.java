@@ -112,6 +112,7 @@ public class Game {
 
             //play=false;
             if (game.missiles.size() < TOTAL_MISSILES) {                    //Fire a missile
+            		game.missiles.clear();
                 v = (int) (Math.random()*150);                                        //Up to 0 to 150 speed
                 a = (int) (Math.random()*60);                                               //From 0 to 60 degrees
                 spawnHeight = (int) (Math.random()*GAME_HEIGHT*6/10) + GAME_HEIGHT*3/10;    //Up to 9/10 full screen and down to 3/10 full screen
