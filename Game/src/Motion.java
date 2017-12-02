@@ -6,6 +6,7 @@
 import java.awt.Font;
 import java.util.*;
 import java.awt.Color;
+
 public class Motion {
     private double v;
     private double theta;
@@ -117,7 +118,7 @@ public class Motion {
             StdDraw.clear();
             game.drawBackground(GAME_WIDTH, GAME_HEIGHT, background);
             blocks.drawBlocks();
-            player1.drawPlayer("right");
+            player1.drawPlayer(player1.direct);
             
             
             if (debugPath) {
@@ -184,7 +185,7 @@ public class Motion {
                if (f <= missiles.get(i2).xVals.size()) {    //So the xVals.get(f) -> the f value can be too large if the other missile has values that are too large. This prevents that. We also know that the yVals will be okay because they should be equal to xVals.size() (They are coordinates)
                    if (missiles.get(i2).yVals.get(f) > blocks.getMinY() && !blocks.missileCollisionAtPoint(missiles.get(i2).xVals.get(f), missiles.get(i2).yVals.get(f)) && !player1.collisionAtPoint(missiles.get(i2).xVals.get(f), missiles.get(i2).yVals.get(f))) {
                        //System.out.println("REDRAWING, HEADS UP");
-                       missiles.get(i2).fireShot(debugPath, GAME_WIDTH, GAME_HEIGHT, spawnHeight, player1, blocks, missiles, f, game, background);           //This is being run while the for statement 2 above is going
+                       missiles.get(i2).fireShot(debugPath, GAME_HEIGHT, GAME_WIDTH, spawnHeight, player1, blocks, missiles, f, game, background);           //This is being run while the for statement 2 above is going
                        i2 = missiles.size();
                     }
                 }

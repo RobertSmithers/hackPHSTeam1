@@ -105,7 +105,7 @@ public class Game {
             blocks.drawBlocks();
             
             //Draw Player
-            player1.drawPlayer("right");
+            player1.drawPlayer(player1.direct);
             
             //Show the screen
             StdDraw.show();

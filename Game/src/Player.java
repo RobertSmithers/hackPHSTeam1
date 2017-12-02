@@ -21,6 +21,9 @@ public class Player
     private final int LEFT_SENSITIVITY;
     private final int RIGHT_SENSITIVITY;
     private final int ANTIGRAVITY_AMOUNT;
+    
+    public String direct = "right";
+    
     /**
      * Constructor
      */
@@ -47,10 +50,14 @@ public class Player
     		StdDraw.setPenColor(StdDraw.WHITE);
         StdDraw.square(playerBody.x + playerBody.width, playerBody.y, 24);
         StdDraw.setPenColor(100, 100, 100);
-        if (direction.equals("right"))
-        		StdDraw.picture(playerBody.x + playerBody.width/2, playerBody.y - playerBody.width/2, "tankR.png", 48, 27.6);       //Outside Image    playerbody.width is one side (all same length)
-        else if (direction.equals("left"))
+        if (direction.equals("right")) {
+        		StdDraw.picture(playerBody.x + playerBody.width/2, playerBody.y - playerBody.width/2, "tankR.png", 48, 27.6); 
+        		direct = direction;
+        }//Outside Image    playerbody.width is one side (all same length)
+        else if (direction.equals("left")) {
         		StdDraw.picture(playerBody.x + playerBody.width/2, playerBody.y - playerBody.width/2, "tankL.png", 48, 27.6);       //Outside Image    playerbody.width is one side (all same length)
+        		direct = direction;
+        }
         else 
         		throw new RuntimeException("Error: invalid input for direction");
          
@@ -97,13 +104,13 @@ public class Player
         
         if (direction.equals("right"))
         {
-        		drawPlayer("right");    
+        		drawPlayer(direction);    
         		playerBody.x+= RIGHT_SENSITIVITY;
         }
         
         if (direction.equals("left"))
         {
-        		drawPlayer("left"); 
+        		drawPlayer(direction); 
         		playerBody.x-= LEFT_SENSITIVITY;
         }
         
@@ -117,7 +124,7 @@ public class Player
             playerBody.y += vy * dt;
             playerBody.y+=vy;
             blocks.drawBlocks();
-            drawPlayer("right");
+            drawPlayer(direct);
             StdDraw.show();
         }
     }
