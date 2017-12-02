@@ -40,14 +40,20 @@ public class Player
      * @param  y   a sample parameter for a method
      * @return     the sum of x and y 
      */
-    public void drawPlayer()
+    public void drawPlayer(String direction)
     {
         //more right, more up
         //contact is above and to the
+    		StdDraw.setPenColor(StdDraw.WHITE);
+        StdDraw.square(playerBody.x + playerBody.width, playerBody.y, 24);
         StdDraw.setPenColor(100, 100, 100);
-        StdDraw.filledSquare(playerBody.x + playerBody.width/2, playerBody.y - playerBody.width/2, playerBody.width);       //Outside square    playerbody.width is one side (all same length)
-        StdDraw.setPenColor(210, 100, 40);
-        StdDraw.square(playerBody.x + playerBody.width, playerBody.y, playerBody.width); 
+        if (direction.equals("right"))
+        		StdDraw.picture(playerBody.x + playerBody.width/2, playerBody.y - playerBody.width/2, "tankR.png", 48, 27.6);       //Outside Image    playerbody.width is one side (all same length)
+        else if (direction.equals("left"))
+        		StdDraw.picture(playerBody.x + playerBody.width/2, playerBody.y - playerBody.width/2, "tankL.png", 48, 27.6);       //Outside Image    playerbody.width is one side (all same length)
+        else 
+        		throw new RuntimeException("Error: invalid input for direction");
+         
 //         StdDraw.setPenColor(90, 90, 90);
 //         StdDraw.filledSquare(playerBody.x + playerBody.width/2, playerBody.y - playerBody.width/2, playerBody.width*9/10);   //yaxis is flipped is StdDraw compared to Rectangle
 //         StdDraw.setPenColor(80, 80, 80);
@@ -91,12 +97,14 @@ public class Player
         
         if (direction.equals("right"))
         {
-            playerBody.x+=RIGHT_SENSITIVITY;
+        		drawPlayer("right");    
+        		playerBody.x+= RIGHT_SENSITIVITY;
         }
         
         if (direction.equals("left"))
         {
-            playerBody.x-=LEFT_SENSITIVITY;
+        		drawPlayer("left"); 
+        		playerBody.x-= LEFT_SENSITIVITY;
         }
         
     }
@@ -109,7 +117,7 @@ public class Player
             playerBody.y += vy * dt;
             playerBody.y+=vy;
             blocks.drawBlocks();
-            drawPlayer();
+            drawPlayer("right");
             StdDraw.show();
         }
     }

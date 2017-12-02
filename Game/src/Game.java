@@ -71,7 +71,7 @@ public class Game {
         int GAME_HEIGHT = 900/3;
         
         //Player variables
-        int size = GAME_HEIGHT/20;
+        int size = GAME_HEIGHT/17;
         int RIGHT_SENSITIVIY = 3;       //Speed of player right movement
         int LEFT_SENSITIVITY = 3;       //Speed of player left movement
         
@@ -102,7 +102,7 @@ public class Game {
             blocks.drawBlocks();
             
             //Draw Player
-            player1.drawPlayer();
+            player1.drawPlayer("right");
             
             //Show the screen
             StdDraw.show();

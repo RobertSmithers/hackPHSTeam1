@@ -121,7 +121,7 @@ public class Motion {
             StdDraw.setPenColor(255,255,255);
             StdDraw.clear();
             blocks.drawBlocks();
-            player1.drawPlayer();
+            player1.drawPlayer("right");
             
             
             if (debugPath) {
