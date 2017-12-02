@@ -6,7 +6,6 @@
  * @version 6/6/17
  */
 import java.awt.*;
-import java.util.*;
 public class Floors
 {
     private int GAME_WIDTH;

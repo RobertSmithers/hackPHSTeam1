@@ -1,21 +1,21 @@
 /******************************************************************************
 * Make the game
-* 5/18/17
+* 12/2/17
 * Robert Smithers
 ******************************************************************************/
-import java.awt.Font;
 import java.util.*;
 import java.awt.Color;
-import java.util.concurrent.TimeUnit;
+
 public class Game {
-    private double v;
-    private double theta;
-    private boolean play;
     private ArrayList<Motion> missiles;
+    
     public Game() 
     {
         missiles = new ArrayList<Motion>();
-        play = true;
+    }
+    
+    public void drawBackground(int GAME_WIDTH, int GAME_HEIGHT, String background) {
+    		StdDraw.picture(GAME_WIDTH/2, GAME_HEIGHT/2, background, 300, 180);
     }
     
     public void drawTrajectory(int GAME_WIDTH, int GAME_HEIGHT, Motion path, int spawnHeight)
@@ -23,9 +23,9 @@ public class Game {
         path.drawPathDotted(GAME_WIDTH, GAME_HEIGHT, spawnHeight);
     }
     
-    public int fireShot(boolean DEBUG, int GAME_WIDTH, int GAME_HEIGHT, Motion path, int spawnHeight, Player player1, Floors blocks, ArrayList<Motion> missiles, int startCounter)
+    public int fireShot(boolean DEBUG, int GAME_WIDTH, int GAME_HEIGHT, Motion path, int spawnHeight, Player player1, Floors blocks, ArrayList<Motion> missiles, int startCounter, Game game, String background)
     {
-        int val = path.fireShot(DEBUG, GAME_HEIGHT, GAME_WIDTH, spawnHeight, player1, blocks, missiles, startCounter);
+        int val = path.fireShot(DEBUG, GAME_HEIGHT, GAME_WIDTH, spawnHeight, player1, blocks, missiles, startCounter, game, background);
         return val;
     }
     
@@ -44,17 +44,16 @@ public class Game {
     public void gameOver(int GAME_WIDTH, int GAME_HEIGHT){
         
         StdDraw.clear(StdDraw.BLACK);
-        StdDraw.setPenColor(StdDraw.RED);
-        StdDraw.text(GAME_WIDTH*2/3,GAME_HEIGHT*88/100, "Well, looks like you lost...");
-        StdDraw.text(GAME_WIDTH*2/3,GAME_HEIGHT*40/100, "Care to try again?");
-        StdDraw.text(GAME_WIDTH*2/3,GAME_HEIGHT*40/100, "Bwahahahaha");
+        StdDraw.picture(GAME_WIDTH/2, GAME_HEIGHT/2, "gameOver.jpg", 100, 100);
         StdDraw.show();
-        play = false;
     }
    
     public static void main(String[] args) {
         //"Don't change pls" variables
         boolean play = true;
+        
+        //Images and colors
+        String background = "sky.jpg";
         
         //Game variables
         int TOTAL_MISSILES = 2;                                 //Total # of missiles at any given point
@@ -67,8 +66,8 @@ public class Game {
         int SHOT_WAIT_TIME = 1500;             //(In millieconds, time before shot fires after seeing dotted line)
         
         //Window variables
-        int GAME_WIDTH = 1500/3;         //First number is the number of pixels that will  be on the screen
-        int GAME_HEIGHT = 900/3;
+        int GAME_WIDTH = 1500/5;         //First number is the number of pixels that will  be on the screen
+        int GAME_HEIGHT = 900/5;
         
         //Player variables
         int size = GAME_HEIGHT/17;
@@ -84,21 +83,25 @@ public class Game {
         int v;                          //Will be random
         int a;                          //Will be random
         int spawnHeight;                //Will be random
- 
+        
         //Make the blocks
         Floors blocks = new Floors(GAME_WIDTH, GAME_HEIGHT);
         
         //Make the player
         Player player1 = new Player(GAME_WIDTH*5/8, GAME_HEIGHT/4, size, GAME_WIDTH, GAME_HEIGHT, RIGHT_SENSITIVIY, LEFT_SENSITIVITY, ANTIGRAVITY_AMOUNT);
         
+        int shots = 0;
         while (play)                //The game itself
         {
-            int shots = 0;
+            shots = 0;
             
             //Clear the screen
             StdDraw.clear();
             
-            //Draw Background
+            //Draw background
+            game.drawBackground(GAME_WIDTH, GAME_HEIGHT, background);
+            
+            //Draw Blocks
             blocks.drawBlocks();
             
             //Draw Player
@@ -106,9 +109,7 @@ public class Game {
             
             //Show the screen
             StdDraw.show();
-            
-            //player1.movePlayer("up", blocks);
-            //System.out.println("W was pressed");
+
             //play=false;
             if (game.missiles.size() < TOTAL_MISSILES) {                    //Fire a missile
                 v = (int) (Math.random()*150);                                        //Up to 0 to 150 speed
@@ -130,23 +131,12 @@ public class Game {
                 game.waitForShot(SHOT_WAIT_TIME);
                 
                 //Fire all of the missiles
-                shots = game.fireShot(PATH_DEBUG, GAME_WIDTH, GAME_HEIGHT, path, spawnHeight, player1, blocks, game.missiles, 0);
-                //if (shots == 2017) game.gameOver(GAME_WIDTH, GAME_HEIGHT);
-            }
-            
-            //This game over method is not working like it should be. It should go black and print out text and that should be it, but it decides to redraw everything else
-            if (shots == 2017) {
-                StdDraw.clear(StdDraw.BLACK);
-                game.gameOver(GAME_WIDTH, GAME_HEIGHT);
-                StdDraw.show();
+                shots = game.fireShot(PATH_DEBUG, GAME_WIDTH, GAME_HEIGHT, path, spawnHeight, player1, blocks, game.missiles, 0, game, background);
+                if (shots == 2017) {
+                		game.gameOver(GAME_WIDTH, GAME_HEIGHT);
+                		play = false;
+                }
             }
         }
     }
-    
-    /**
-     * 
-     * Idea: Something like the screen moves up, your character has to jump, avoid the incoming shots 
-     * 
-     * The arcs of the trajectory should be continued, using the preexisting BallisticMotion idea.
-     */
 }
