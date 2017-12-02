@@ -43,7 +43,6 @@ public class Motion {
         double vy = v * Math.sin(theta); // velocity in y direction
         
         double ax = 0.0, ay = 0.0; double a = 0.0;// acceleration
-        double t = 0.0; // time
         double dt = 0.02;//0.012; // time quantum
         
         ay = -G - (C * v * vy);
@@ -81,7 +80,7 @@ public class Motion {
         StdDraw.show();
         }
         
-    public int fireShot(boolean debugPath, int GAME_HEIGHT, int GAME_WIDTH, int spawnHeight, Player player1, Floors blocks, ArrayList<Motion> missiles, int startCounter) {
+    public int fireShot(boolean debugPath, int GAME_HEIGHT, int GAME_WIDTH, int spawnHeight, Player player1, Floors blocks, ArrayList<Motion> missiles, int startCounter, Game game, String background) {
         int ret = 0;     //Return
         
         double t = 0.0; // time
@@ -97,11 +96,7 @@ public class Motion {
         // loop until ball hits ground
         while (yVals.get(f) >= 0.0 && !blocks.missileCollisionAtPoint(xVals.get(f), yVals.get(f)) && !player1.collisionAtPoint(xVals.get(f), yVals.get(f))) {   //the missile y value is greater than 0 and not intersecting with the player or a block.
             if (StdDraw.hasNextKeyTyped()) {            //Checking if the player needs some movement
-                if (StdDraw.isKeyPressed(32)) {                             //If the user presses "space"
-                    player1.movePlayer("up", blocks);
-                }
-                
-                if (StdDraw.isKeyPressed(87)) {                             //If the user presses "w"
+                if (StdDraw.isKeyPressed(32) || StdDraw.isKeyPressed(87)) {                             //If the user presses "space"
                     player1.movePlayer("up", blocks);
                 }
                 
@@ -120,6 +115,7 @@ public class Motion {
             //Remove Text and draw blocks, player
             StdDraw.setPenColor(255,255,255);
             StdDraw.clear();
+            game.drawBackground(GAME_WIDTH, GAME_HEIGHT, background);
             blocks.drawBlocks();
             player1.drawPlayer();
             
@@ -175,12 +171,8 @@ public class Motion {
                     player1.playerInfo();
                 }
                 
-                if (player1.collisionAtPoint(missiles.get(i).xVals.get(f), missiles.get(i).yVals.get(f)))
-                {
-                    return 2017;
-                }
+                if (player1.collisionAtPoint(missiles.get(i).xVals.get(f), missiles.get(i).yVals.get(f))) return 2017;
                 missiles.remove(missiles.get(i));
-                //System.out.println("Removed");
                 ret = i;
                
                }
@@ -192,7 +184,7 @@ public class Motion {
                if (f <= missiles.get(i2).xVals.size()) {    //So the xVals.get(f) -> the f value can be too large if the other missile has values that are too large. This prevents that. We also know that the yVals will be okay because they should be equal to xVals.size() (They are coordinates)
                    if (missiles.get(i2).yVals.get(f) > blocks.getMinY() && !blocks.missileCollisionAtPoint(missiles.get(i2).xVals.get(f), missiles.get(i2).yVals.get(f)) && !player1.collisionAtPoint(missiles.get(i2).xVals.get(f), missiles.get(i2).yVals.get(f))) {
                        //System.out.println("REDRAWING, HEADS UP");
-                       missiles.get(i2).fireShot(debugPath, GAME_WIDTH, GAME_HEIGHT, spawnHeight, player1, blocks, missiles, f);           //This is being run while the for statement 2 above is going
+                       missiles.get(i2).fireShot(debugPath, GAME_WIDTH, GAME_HEIGHT, spawnHeight, player1, blocks, missiles, f, game, background);           //This is being run while the for statement 2 above is going
                        i2 = missiles.size();
                     }
                 }
@@ -206,10 +198,13 @@ public class Motion {
         for (int i=0;i<f-1;i++){
             if (i<=255) StdDraw.setPenColor(Math.abs(255-i),0+i,0+i);       //Makes the little gradient from red to turqouise
             else StdDraw.setPenColor(0,255,255);                            //Otherwise it stays turqouise at the max vals
-            StdDraw.filledCircle(xVals.get(i), yVals.get(i), LINE_THICKNESS);
-            StdDraw.setPenColor(0,0,0);
-            StdDraw.filledCircle(xVals.get(f-1), yVals.get(f-1), LINE_THICKNESS*20/5);
+            try {
+	            	StdDraw.filledCircle(xVals.get(i), yVals.get(i), LINE_THICKNESS);
+	            	StdDraw.setPenColor(0,0,0);
+	            	StdDraw.filledCircle(xVals.get(f-1), yVals.get(f-1), LINE_THICKNESS*20/5);
+            } catch (IndexOutOfBoundsException e) {
+            		continue;
+            }
         }
     }
-
 }
