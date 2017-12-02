@@ -119,6 +119,7 @@ public class Motion {
             game.drawBackground(GAME_WIDTH, GAME_HEIGHT, background);
             blocks.drawBlocks();
             player1.drawPlayer(player1.direct);
+            game.drawScore(GAME_WIDTH, GAME_HEIGHT);
             
             
             if (debugPath) {

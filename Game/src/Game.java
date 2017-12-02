@@ -5,9 +5,13 @@
 ******************************************************************************/
 import java.util.*;
 import java.awt.Color;
+import java.awt.Font;
+
 
 public class Game {
     private ArrayList<Motion> missiles;
+    public static final Font font = new Font("Arial", 1, 30);
+    public static int round = 0;
     
     public Game() 
     {
@@ -16,6 +20,11 @@ public class Game {
     
     public void drawBackground(int GAME_WIDTH, int GAME_HEIGHT, String background) {
     		StdDraw.picture(GAME_WIDTH/2, GAME_HEIGHT/2, background, 300, 180);
+    }
+    
+    public void drawScore(int GAME_WIDTH, int GAME_HEIGHT) {
+    		StdDraw.setFont(font);
+		StdDraw.text(GAME_WIDTH/2, GAME_HEIGHT*.9, Integer.toString(round));
     }
     
     public void drawTrajectory(int GAME_WIDTH, int GAME_HEIGHT, Motion path, int spawnHeight)
@@ -113,6 +122,8 @@ public class Game {
             //play=false;
             if (game.missiles.size() < TOTAL_MISSILES) {                    //Fire a missile
             		game.missiles.clear();
+            		round++;
+            		game.drawScore(GAME_WIDTH, GAME_HEIGHT);
                 v = (int) (Math.random()*150);                                        //Up to 0 to 150 speed
                 a = (int) (Math.random()*60);                                               //From 0 to 60 degrees
                 spawnHeight = (int) (Math.random()*GAME_HEIGHT*6/10) + GAME_HEIGHT*3/10;    //Up to 9/10 full screen and down to 3/10 full screen
