@@ -104,8 +104,7 @@ public class Game {
 			try {
 				CryptoUtils.decrypt(key, highscore, highscore);
 			} catch (CryptoException ex) {
-				//System.out.println(ex.getMessage());
-				//ex.printStackTrace();
+				
 			}
 			
 			BufferedReader reader = new BufferedReader(new FileReader(highscore));
