@@ -1,21 +1,51 @@
 /******************************************************************************
 * Make the game
 * 12/2/17
-* Robert Smithers
+* Robert Smithers, Deven Roychowdhury, Arymon ioanfolanof
 ******************************************************************************/
 import java.util.*;
 import java.awt.Color;
 import java.awt.Font;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
+import crypto.CryptoException;
+import crypto.CryptoUtils;
+
 
 public class Game {
-    private ArrayList<Motion> missiles;
+	private ArrayList<Motion> missiles;
+    final private File highscore = new File("highScore.txt");
+    private PrintWriter writer;
+    final private String key = "b2Hs0AkwpVme@duW";			//Used for the AES
+    
     public static final Font font = new Font("Arial", 1, 30);
     public static int round = 0;
     
-    public Game() 
+    public Game()
     {
         missiles = new ArrayList<Motion>();
+        try {
+
+        	//Makes highScore.txt if they don't yet have it
+        	if(!highscore.exists() && !highscore.isDirectory()) {
+        		writer = new PrintWriter(highscore);			//Creates a printwriter with a blank file, only creating the username and password rows
+        		writer.printf("%8s%25s\n", "Name", "Highscore", "");
+        		writer.close();
+
+        		//Encrypts the file after modification
+        		try {
+        			CryptoUtils.encrypt(key, highscore, highscore);
+        		} catch (CryptoException ex) {
+        			System.out.println(ex.getMessage());
+        			ex.printStackTrace();
+        		}
+        	}
+        } catch (FileNotFoundException e) {
+        	e.printStackTrace();
+        }
     }
     
     public void drawBackground(int GAME_WIDTH, int GAME_HEIGHT, String background) {

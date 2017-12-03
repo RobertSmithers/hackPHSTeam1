@@ -187,7 +187,7 @@ public class Motion {
                    if (missiles.get(i2).yVals.get(f) > blocks.getMinY() && !blocks.missileCollisionAtPoint(missiles.get(i2).xVals.get(f), missiles.get(i2).yVals.get(f)) && !player1.collisionAtPoint(missiles.get(i2).xVals.get(f), missiles.get(i2).yVals.get(f))) {
                        //System.out.println("REDRAWING, HEADS UP");
                        missiles.get(i2).fireShot(debugPath, GAME_HEIGHT, GAME_WIDTH, spawnHeight, player1, blocks, missiles, f, game, background);           //This is being run while the for statement 2 above is going
-                       i2 = missiles.size();
+                       break;
                     }
                 }
             }
