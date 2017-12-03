@@ -104,14 +104,18 @@ public class Player
         
         if (direction.equals("right"))
         {
-        		drawPlayer(direction);    
-        		playerBody.x+= RIGHT_SENSITIVITY;
+        		if (!(playerBody.x == GAME_WIDTH)) {
+        			drawPlayer(direction);    
+        			playerBody.x+= RIGHT_SENSITIVITY;
+        		}
         }
         
         if (direction.equals("left"))
         {
-        		drawPlayer(direction); 
-        		playerBody.x-= LEFT_SENSITIVITY;
+        		if (!(playerBody.x == 0)) {
+        			drawPlayer(direction); 
+        			playerBody.x-= LEFT_SENSITIVITY;
+        		}
         }
         
     }
@@ -148,18 +152,18 @@ public class Player
         double topLeftx = 0.0; double topLefty = 0.0;
         double topRightx = playerBody.width; double topRighty = 0;
         double bottomRightx = playerBody.width; double bottomRighty = playerBody.width;
-        double bottomLeftx = 0.0; double bottomLefty = playerBody.width;
+        double bottomLeftx = playerBody.width; double bottomLefty = 0.0;
         
         if (blocks.playerCollisionAtPoint(topLeftx, topLefty) && blocks.playerCollisionAtPoint(topRightx, topRighty)) {
             return "topEdge";       //the top edge is colliding with the block
         }
-        if (blocks.playerCollisionAtPoint(topLeftx, topLefty) && blocks.playerCollisionAtPoint(bottomLeftx, bottomLefty)) {
+        if (blocks.playerCollisionAtPoint(topLeftx, topLefty) || blocks.playerCollisionAtPoint(bottomLeftx, bottomLefty)) {
             return "leftEdge";      //The left edge is colliding with the block
         }
         if (blocks.playerCollisionAtPoint(bottomLeftx, bottomLefty) && blocks.playerCollisionAtPoint(bottomRightx, bottomRighty)) {
             return "bottomEdge";    //The bottom edge is colliding with the blocks
         }
-        if (blocks.playerCollisionAtPoint(bottomRightx, bottomRighty) && blocks.playerCollisionAtPoint(topRightx, topRighty)) {
+        if (blocks.playerCollisionAtPoint(bottomRightx, bottomRighty) || blocks.playerCollisionAtPoint(topRightx, topRighty)) {
             return "rightEdge";     ////The right edge is colliding with the block
         }
         return null;

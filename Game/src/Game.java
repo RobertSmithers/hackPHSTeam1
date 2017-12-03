@@ -10,7 +10,7 @@ import java.awt.Font;
 
 public class Game {
     private ArrayList<Motion> missiles;
-    public static final Font font = new Font("Arial", 1, 30);
+    public static final Font font = new Font("Arial", 1, 40);
     public static int round = 0;
     
     public Game() 
@@ -66,7 +66,7 @@ public class Game {
         
         //Game variables
         int TOTAL_MISSILES = 2;                                 //Total # of missiles at any given point
-        int ANTIGRAVITY_AMOUNT = 6;                              //The more antigravity, the higher the player will bounce
+        int ANTIGRAVITY_AMOUNT = 4;                              //The more antigravity, the higher the player will bounce
         
         //Path variables
         boolean PATH_DEBUG = false;
@@ -75,7 +75,7 @@ public class Game {
         int SHOT_WAIT_TIME = 1500;             //(In millieconds, time before shot fires after seeing dotted line)
         
         //Window variables
-        int GAME_WIDTH = 1500/5;         //First number is the number of pixels that will  be on the screen
+        int GAME_WIDTH = 1440/5;         //First number is the number of pixels that will  be on the screen
         int GAME_HEIGHT = 900/5;
         
         //Player variables
@@ -143,10 +143,14 @@ public class Game {
                 game.waitForShot(SHOT_WAIT_TIME);
                 
                 //Fire all of the missiles
-                shots = game.fireShot(PATH_DEBUG, GAME_WIDTH, GAME_HEIGHT, path, spawnHeight, player1, blocks, game.missiles, 0, game, background);
-                if (shots == 2017) {
-                		game.gameOver(GAME_WIDTH, GAME_HEIGHT);
-                		play = false;
+                try {
+	                shots = game.fireShot(PATH_DEBUG, GAME_WIDTH, GAME_HEIGHT, path, spawnHeight, player1, blocks, game.missiles, 0, game, background);
+	                if (shots == 2017) {
+	                		game.gameOver(GAME_WIDTH, GAME_HEIGHT);
+	                		play = false;
+	                	}
+                } catch (IndexOutOfBoundsException e){
+                		game.missiles.clear();
                 }
             }
         }

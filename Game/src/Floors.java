@@ -28,7 +28,7 @@ public class Floors
     {
         //Because the floorBlock as a Rectangle starts at 0, height/15 with the top left as an anchor point, we need it to draw like it is different.
         StdDraw.setPenColor(0,153,76);
-        StdDraw.filledRectangle( (double) floorBlock.x+GAME_WIDTH/2, (double) floorBlock.y, (double) floorBlock.width, (double) floorBlock.height);
+        StdDraw.picture( (double) floorBlock.x+GAME_WIDTH/2, (double) floorBlock.y+13, "ground.png", GAME_WIDTH, GAME_HEIGHT/3.5);
         //StdDraw.picture((double) floorBlock.x+GAME_WIDTH/2, (double) floorBlock.y, "ground.png", (double) floorBlock.width, (double) GAME_HEIGHT/5);
     }
     
@@ -36,6 +36,7 @@ public class Floors
         if (floorBlock.contains(x,y)) {
             return true;
         }
+
         return false;
     }
     
@@ -43,7 +44,7 @@ public class Floors
         if (floorBlock.contains(x,y)) {
             return true;
         }
-        return false;
+       return false;
     }
     
     public double getMinY(){
