@@ -30,11 +30,7 @@ public class Game {
     public static final Font font = new Font("Arial", 1, 40);
     private static int round = 0;
     public Scanner input = new Scanner(System.in);
-
-<<<<<<< HEAD
-    private static int round = 0;
-=======
->>>>>>> 6bf2ac98357d0ed26fce6d97a534b5afe77ff8a1
+    private int highest;
     
     public Game()
     {
@@ -44,11 +40,7 @@ public class Game {
         	//Makes highScore.txt if they don't yet have it
         	if(!highscore.exists() && !highscore.isDirectory()) {
         		writer = new PrintWriter(highscore);			//Creates a printwriter with a blank file, only creating the username and password rows
-<<<<<<< HEAD
         		writer.printf("%8s%25s\n", "Name", "Highscore", "");
-=======
-        		writer.printf("%10s%25s\n", "Name", "Highscore", "");
->>>>>>> 6bf2ac98357d0ed26fce6d97a534b5afe77ff8a1
         		writer.close();
 
         		//Encrypts the file after modification
@@ -99,9 +91,15 @@ public class Game {
     public String[] gameOver(int GAME_WIDTH, int GAME_HEIGHT, int userHighscore){
         
         StdDraw.clear(StdDraw.BLACK);
+        StdDraw.setPenColor(StdDraw.WHITE);
         StdDraw.picture(GAME_WIDTH/2, GAME_HEIGHT/2, "gameOver.jpg", 100, 100);
+        StdDraw.text(GAME_WIDTH/2, GAME_HEIGHT/1.4, "Your Score: " + round);
+        
+        String[] list = getHighscore(userHighscore);
+        
+        StdDraw.text(GAME_WIDTH/2, GAME_HEIGHT/3.85, "Highscore: " + highest);
         StdDraw.show();
-        return getHighscore(userHighscore);
+        return list;
     }
     
     public String[] getHighscore(int userHighscore) {
@@ -233,7 +231,7 @@ public class Game {
         int GAME_HEIGHT = 900/5;
         
         //Player variables
-        int size = GAME_HEIGHT/17;
+        int size = 13;
         int RIGHT_SENSITIVIY = 3;       //Speed of player right movement
         int LEFT_SENSITIVITY = 3;       //Speed of player left movement
         
@@ -296,10 +294,9 @@ public class Game {
                 
                 //Draw the dotted path
                 while ((!game.drawTrajectory(GAME_WIDTH, GAME_HEIGHT, path, spawnHeight)) || (!game.drawTrajectory(GAME_WIDTH, GAME_HEIGHT, path2, spawnHeight))) {
-                		System.out.println("DO");
                 		v = (int) (Math.random()*150);                                        //Up to 0 to 150 speed
-                    a = (int) (Math.random()*60);                                               //From 0 to 60 degrees
-                    spawnHeight = (int) (Math.random()*GAME_HEIGHT*6/10) + GAME_HEIGHT*3/10;    //Up to 9/10 full screen and down to 3/10 full screen
+                		a = (int) (Math.random()*60);                                               //From 0 to 60 degrees
+                		spawnHeight = (int) (Math.random()*GAME_HEIGHT*6/10) + GAME_HEIGHT*3/10;    //Up to 9/10 full screen and down to 3/10 full screen
                     
                     path = new Motion(v, a, PATH_TEXT_COLORSCHEME, LINE_THICKNESS);
                     path2 = new Motion(v+10, a+12, PATH_TEXT_COLORSCHEME, LINE_THICKNESS);
