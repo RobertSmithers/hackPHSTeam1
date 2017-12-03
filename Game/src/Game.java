@@ -24,7 +24,7 @@ public class Game {
     private ArrayList<Motion> missiles;
     public static final Font font = new Font("Arial", 1, 40);
 
-    public static int round = 0;
+    private static int round = 0;
     
     public Game()
     {
@@ -34,7 +34,7 @@ public class Game {
         	//Makes highScore.txt if they don't yet have it
         	if(!highscore.exists() && !highscore.isDirectory()) {
         		writer = new PrintWriter(highscore);			//Creates a printwriter with a blank file, only creating the username and password rows
-        		writer.printf("%8s%25s\n", "Names", "Highscore", "");
+        		writer.printf("%8s%25s\n", "Name", "Highscore", "");
         		writer.close();
 
         		//Encrypts the file after modification
@@ -59,9 +59,9 @@ public class Game {
 		StdDraw.text(GAME_WIDTH/2, GAME_HEIGHT*.9, Integer.toString(round));
     }
     
-    public void drawTrajectory(int GAME_WIDTH, int GAME_HEIGHT, Motion path, int spawnHeight)
+    public boolean drawTrajectory(int GAME_WIDTH, int GAME_HEIGHT, Motion path, int spawnHeight)
     {
-        path.drawPathDotted(GAME_WIDTH, GAME_HEIGHT, spawnHeight);
+        return path.drawPathDotted(GAME_WIDTH, GAME_HEIGHT, spawnHeight);
     }
     
     public int fireShot(boolean DEBUG, int GAME_WIDTH, int GAME_HEIGHT, Motion path, int spawnHeight, Player player1, Floors blocks, ArrayList<Motion> missiles, int startCounter, Game game, String background)
@@ -124,6 +124,7 @@ public class Game {
         int v;                          //Will be random
         int a;                          //Will be random
         int spawnHeight;                //Will be random
+        int max = 150;
         
         //Make the blocks
         Floors blocks = new Floors(GAME_WIDTH, GAME_HEIGHT);
@@ -155,21 +156,37 @@ public class Game {
             if (game.missiles.size() < TOTAL_MISSILES) {                    //Fire a missile
             		game.missiles.clear();
             		round++;
+            		if (round % 3 == 0) max += 30;
+            		if (round % 2 == 0) {
+            			SHOT_WAIT_TIME -= 75;
+            			if (SHOT_WAIT_TIME <= 0) {
+            				SHOT_WAIT_TIME = 50;
+            			}
+            		}
             		game.drawScore(GAME_WIDTH, GAME_HEIGHT);
-                v = (int) (Math.random()*150);                                        //Up to 0 to 150 speed
+                v = (int) (Math.random()*max);                                        //Up to 0 to 150 speed
                 a = (int) (Math.random()*60);                                               //From 0 to 60 degrees
                 spawnHeight = (int) (Math.random()*GAME_HEIGHT*6/10) + GAME_HEIGHT*3/10;    //Up to 9/10 full screen and down to 3/10 full screen
                 
                 Motion path = new Motion(v, a, PATH_TEXT_COLORSCHEME, LINE_THICKNESS);
                 Motion path2 = new Motion(v+10, a+12, PATH_TEXT_COLORSCHEME, LINE_THICKNESS);
                 //Store the missiles in an arrayList so they can be drawn at the same time
+                
+                //Draw the dotted path
+                while ((!game.drawTrajectory(GAME_WIDTH, GAME_HEIGHT, path, spawnHeight)) || (!game.drawTrajectory(GAME_WIDTH, GAME_HEIGHT, path2, spawnHeight))) {
+                		System.out.println("DO");
+                		v = (int) (Math.random()*150);                                        //Up to 0 to 150 speed
+                    a = (int) (Math.random()*60);                                               //From 0 to 60 degrees
+                    spawnHeight = (int) (Math.random()*GAME_HEIGHT*6/10) + GAME_HEIGHT*3/10;    //Up to 9/10 full screen and down to 3/10 full screen
+                    
+                    path = new Motion(v, a, PATH_TEXT_COLORSCHEME, LINE_THICKNESS);
+                    path2 = new Motion(v+10, a+12, PATH_TEXT_COLORSCHEME, LINE_THICKNESS);
+                    //Store the missiles in an arrayList so they can be drawn at the same time
+                }
+         
                 game.missiles.add(path);
                 //System.out.println(game.missiles.size());
                 game.missiles.add(path2);
-                
-                //Draw the dotted path
-                game.drawTrajectory(GAME_WIDTH, GAME_HEIGHT, path, spawnHeight);
-                game.drawTrajectory(GAME_WIDTH, GAME_HEIGHT, path2, spawnHeight);
                 
                 //Wait for number of seconds before firing on the path
                 game.waitForShot(SHOT_WAIT_TIME);
