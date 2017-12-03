@@ -83,6 +83,12 @@ public class Player
         //System.out.println("player middle coordinate (StdDraw) = x: "+ playerBody.x + ", y: "+ playerBody.y);
         StdDraw.setPenColor(0, 0, 0);            //Inside square
     }
+    public double xInfo() {
+    		return playerBody.x;
+    }
+    
+   
+    
     
     public void playerInfo() {
         System.out.println("player top left (rect) = x: " + playerBody.x + ", y: "+ playerBody.y + "player top right = x: " + (playerBody.x + playerBody.width));
