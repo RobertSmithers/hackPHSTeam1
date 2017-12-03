@@ -48,7 +48,6 @@ public class Player
         //more right, more up
         //contact is above and to the
     		StdDraw.setPenColor(StdDraw.WHITE);
-        StdDraw.square(playerBody.x + playerBody.width, playerBody.y, 24);
         StdDraw.setPenColor(100, 100, 100);
         if (direction.equals("right")) {
         		StdDraw.picture(playerBody.x + playerBody.width/2, playerBody.y - playerBody.width/2, "tankR.png", 48, 27.6); 
@@ -83,6 +82,12 @@ public class Player
         //System.out.println("player middle coordinate (StdDraw) = x: "+ playerBody.x + ", y: "+ playerBody.y);
         StdDraw.setPenColor(0, 0, 0);            //Inside square
     }
+    public double xInfo() {
+    		return playerBody.x;
+    }
+    
+   
+    
     
     public void playerInfo() {
         System.out.println("player top left (rect) = x: " + playerBody.x + ", y: "+ playerBody.y + "player top right = x: " + (playerBody.x + playerBody.width));

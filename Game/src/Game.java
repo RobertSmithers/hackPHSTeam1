@@ -110,8 +110,7 @@ public class Game {
 			try {
 				CryptoUtils.decrypt(key, highscore, highscore);
 			} catch (CryptoException ex) {
-				//System.out.println(ex.getMessage());
-				//ex.printStackTrace();
+				
 			}
 			
 			BufferedReader reader = new BufferedReader(new FileReader(highscore));
@@ -134,24 +133,16 @@ public class Game {
 						i++;
 					}
 					highscoreString = text[i];
+					System.out.println("highscore rn is "+highscoreString +"from "+highscoreName);
 					if (Integer.parseInt(highscoreString)>highest) {
 						highest = Integer.parseInt(highscoreString);
+						System.out.println("new highest"+highscoreString);
 						highestName = highscoreName;
 					}
 					if (userHighscore > Integer.parseInt(highscoreString)) {			//Better highscore
 						highscoreTotal[1] = Integer.toString(userHighscore);
 						System.out.println("Congratulations! New high score. Input your name: ");
 						username = input.next();
-						
-						
-						//Encrypt again to protect the data while we are not using it
-						try {
-							CryptoUtils.encrypt(key, highscore, highscore);
-							//CryptoUtils.decrypt(key, encryptedFile, decryptedFile);
-						} catch (CryptoException ex) {
-							System.out.println(ex.getMessage());
-							ex.printStackTrace();
-						}
 						break;
 					}
 					else {
@@ -170,7 +161,7 @@ public class Game {
 			}
 			highscoreTotal[0] = highestName;
 			highscoreTotal[1] = Integer.toString(highest);
-			System.out.println("highscoreName = "+highscoreName+"\nhighscoreString = "+highscoreString);
+			System.out.println("highscoreName = "+highscoreTotal[0]+"\nhighscoreString = "+highscoreTotal[1]);
 			System.out.println("Please enter your name: ");
 			username = input.next();
 			newHighscore(username,Integer.toString(userHighscore));
@@ -197,7 +188,7 @@ public class Game {
 			highscoreNew.close();
 
 			//Encrypt again after modification
-			//CryptoUtils.encrypt(key, highscore, highscore);
+			CryptoUtils.encrypt(key, highscore, highscore);
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

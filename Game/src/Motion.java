@@ -103,21 +103,25 @@ public class Motion {
         
         // loop until ball hits ground
         while (yVals.get(f) >= 0.0 && !blocks.missileCollisionAtPoint(xVals.get(f), yVals.get(f)) && !player1.collisionAtPoint(xVals.get(f), yVals.get(f))) {   //the missile y value is greater than 0 and not intersecting with the player or a block.
-            if (StdDraw.hasNextKeyTyped()) {            //Checking if the player needs some movement
-                if (StdDraw.isKeyPressed(32) || StdDraw.isKeyPressed(87)) {                             //If the user presses "space"
-                    player1.movePlayer("up", blocks);
-                }
+            
+        	if(StdDraw.mouseX() > player1.xInfo()) player1.movePlayer("right", blocks);
+
+        	if(StdDraw.mouseX() < player1.xInfo()) player1.movePlayer("left", blocks);
+
+        	if (StdDraw.isKeyPressed(32) || StdDraw.isKeyPressed(87)) {                             //If the user presses "space"
+        		player1.movePlayer("up", blocks);
+        	}
                 
-                if (StdDraw.isKeyPressed(65)) {                             //If the user presses "a"
+              /*  if (StdDraw.isKeyPressed(65)) {                             //If the user presses "a"
                     player1.movePlayer("left", blocks);
                 }
                 
                 if (StdDraw.isKeyPressed(68)) {                             //If the user presses "d"
                     player1.movePlayer("right", blocks);
-                }
+                }*/
                 
                 
-            }
+            
             player1.fall(blocks);
             
             //Remove Text and draw blocks, player
