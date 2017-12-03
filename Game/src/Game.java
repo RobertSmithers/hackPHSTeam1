@@ -16,17 +16,14 @@ import crypto.CryptoUtils;
 
 
 public class Game {
-<<<<<<< HEAD
-	private ArrayList<Motion> missiles;
+
     final private File highscore = new File("highScore.txt");
     private PrintWriter writer;
     final private String key = "b2Hs0AkwpVme@duW";			//Used for the AES
-    
-    public static final Font font = new Font("Arial", 1, 30);
-=======
+
     private ArrayList<Motion> missiles;
     public static final Font font = new Font("Arial", 1, 40);
->>>>>>> 56a3e3b2d3e3a66ee992045b9bdfc156de40579a
+
     public static int round = 0;
     
     public Game()
@@ -37,7 +34,7 @@ public class Game {
         	//Makes highScore.txt if they don't yet have it
         	if(!highscore.exists() && !highscore.isDirectory()) {
         		writer = new PrintWriter(highscore);			//Creates a printwriter with a blank file, only creating the username and password rows
-        		writer.printf("%8s%25s\n", "Name", "Highscore", "");
+        		writer.printf("%8s%25s\n", "Names", "Highscore", "");
         		writer.close();
 
         		//Encrypts the file after modification
