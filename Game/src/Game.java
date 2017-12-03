@@ -30,6 +30,7 @@ public class Game {
     public static final Font font = new Font("Arial", 1, 40);
     private static int round = 0;
     public Scanner input = new Scanner(System.in);
+
     
     public Game()
     {
