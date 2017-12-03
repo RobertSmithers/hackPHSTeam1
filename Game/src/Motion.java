@@ -8,7 +8,7 @@ import java.util.*;
 import java.awt.Color;
 
 public class Motion {
-    private double v;
+    public double v;
     private double theta;
     private Color PATH_TEXT_COLOR;
     //All projectile values to be stored for other methods (only used for the DEBUG feature)
@@ -24,7 +24,8 @@ public class Motion {
     
     
     //CHANGEABLE VALUES FOR YOUR LIKING, RJ MR. MASTER CODER
-    private double LINE_THICKNESS;                           //Change to adjust the thickness of the shooting line
+    private double LINE_THICKNESS;   
+    //Change to adjust the thickness of the shooting line
     
     public Motion(double velocity, double angle, Color PATH_TEXT_COLOR, double LINE_THICKNESS) 
     {
@@ -34,7 +35,7 @@ public class Motion {
         this.LINE_THICKNESS = LINE_THICKNESS;
     }
     
-    public void drawPathDotted(int GAME_WIDTH, int GAME_HEIGHT, int spawnHeight) {
+    public boolean drawPathDotted(int GAME_WIDTH, int GAME_HEIGHT, int spawnHeight) {
         double G = 9.8; // gravitational constant m/s^2
         double C = 0.002; // drag force coefficient
       
@@ -72,13 +73,19 @@ public class Motion {
             //Redraw the path
             if ((int) y == 0) {
                 for (int i=0;i<xVals.size();i+=20){
-                    StdDraw.setPenColor(255,0,0);
-                    StdDraw.filledCircle(xVals.get(i), yVals.get(i), LINE_THICKNESS);
+                		if (xVals.get(i) >= GAME_WIDTH*.7) {
+                			return false;
+                		}
+                	}
+                	for (int j=0;j<xVals.size();j+=20){
+                		StdDraw.setPenColor(255,0,0);
+                		StdDraw.filledCircle(xVals.get(j), yVals.get(j), LINE_THICKNESS);
                 }
                 StdDraw.show(5);
             }
         }
         StdDraw.show();
+        return true;
         }
         
     public int fireShot(boolean debugPath, int GAME_HEIGHT, int GAME_WIDTH, int spawnHeight, Player player1, Floors blocks, ArrayList<Motion> missiles, int startCounter, Game game, String background) {
