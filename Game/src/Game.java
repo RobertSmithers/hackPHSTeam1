@@ -4,11 +4,17 @@
 * Robert Smithers, Deven Roychowdhury, Arymon ioanfolanof
 ******************************************************************************/
 import java.util.*;
+
+import javax.crypto.IllegalBlockSizeException;
+
 import java.awt.Color;
 import java.awt.Font;
-
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import crypto.CryptoException;
@@ -16,15 +22,19 @@ import crypto.CryptoUtils;
 
 
 public class Game {
-
+	private ArrayList<Motion> missiles;
     final private File highscore = new File("highScore.txt");
     private PrintWriter writer;
     final private String key = "b2Hs0AkwpVme@duW";			//Used for the AES
-
-    private ArrayList<Motion> missiles;
+    
     public static final Font font = new Font("Arial", 1, 40);
-
     private static int round = 0;
+    public Scanner input = new Scanner(System.in);
+
+<<<<<<< HEAD
+    private static int round = 0;
+=======
+>>>>>>> 6bf2ac98357d0ed26fce6d97a534b5afe77ff8a1
     
     public Game()
     {
@@ -34,7 +44,11 @@ public class Game {
         	//Makes highScore.txt if they don't yet have it
         	if(!highscore.exists() && !highscore.isDirectory()) {
         		writer = new PrintWriter(highscore);			//Creates a printwriter with a blank file, only creating the username and password rows
+<<<<<<< HEAD
         		writer.printf("%8s%25s\n", "Name", "Highscore", "");
+=======
+        		writer.printf("%10s%25s\n", "Name", "Highscore", "");
+>>>>>>> 6bf2ac98357d0ed26fce6d97a534b5afe77ff8a1
         		writer.close();
 
         		//Encrypts the file after modification
@@ -82,12 +96,120 @@ public class Game {
         }
     }
     
-    public void gameOver(int GAME_WIDTH, int GAME_HEIGHT){
+    public String[] gameOver(int GAME_WIDTH, int GAME_HEIGHT, int userHighscore){
         
         StdDraw.clear(StdDraw.BLACK);
         StdDraw.picture(GAME_WIDTH/2, GAME_HEIGHT/2, "gameOver.jpg", 100, 100);
         StdDraw.show();
+        return getHighscore(userHighscore);
     }
+    
+    public String[] getHighscore(int userHighscore) {
+    	String[] highscoreTotal = new String[2];String username="";
+    	try
+		{
+			//Decrypting before pulling data
+			try {
+				CryptoUtils.decrypt(key, highscore, highscore);
+			} catch (CryptoException ex) {
+				//System.out.println(ex.getMessage());
+				//ex.printStackTrace();
+			}
+			
+			BufferedReader reader = new BufferedReader(new FileReader(highscore));
+			String line; String[] text; String highscoreString = ""; String highscoreName = "";int highest=0;String highestName = "";
+			while ((line = reader.readLine()) != null && (text = line.split(" ")).length > 35)			//35 is the length of having the username and password strings
+			{
+				text = line.split(" ");
+				for (int i=0; i<text.length; i++) {					//1 and 2 is the name and highscore, respectively
+					while (text[i].equals("") && i<text.length) {
+						i++;
+					}
+					highscoreName = text[i];
+					try {
+						i++;
+						if (text[i] == null) i--;
+					} catch (ArrayIndexOutOfBoundsException e) {
+						continue;
+					}
+					while (text[i].equals("") && i<text.length) {
+						i++;
+					}
+					highscoreString = text[i];
+					if (Integer.parseInt(highscoreString)>highest) {
+						highest = Integer.parseInt(highscoreString);
+						highestName = highscoreName;
+					}
+					if (userHighscore > Integer.parseInt(highscoreString)) {			//Better highscore
+						highscoreTotal[1] = Integer.toString(userHighscore);
+						System.out.println("Congratulations! New high score. Input your name: ");
+						username = input.next();
+						
+						
+						//Encrypt again to protect the data while we are not using it
+						try {
+							CryptoUtils.encrypt(key, highscore, highscore);
+							//CryptoUtils.decrypt(key, encryptedFile, decryptedFile);
+						} catch (CryptoException ex) {
+							System.out.println(ex.getMessage());
+							ex.printStackTrace();
+						}
+						break;
+					}
+					else {
+						System.out.println("You didn't quite beat the highscore, but we can add you to the leaderboards!\nPlease input your name:");
+						username = input.next();
+						
+					}
+				}
+			}
+			reader.close();
+			try {
+				CryptoUtils.encrypt(key, highscore, highscore);
+			} catch (CryptoException ex) {
+				System.out.println(ex.getMessage());
+				ex.printStackTrace();
+			}
+			highscoreTotal[0] = highestName;
+			highscoreTotal[1] = Integer.toString(highest);
+			System.out.println("highscoreName = "+highscoreName+"\nhighscoreString = "+highscoreString);
+			System.out.println("Please enter your name: ");
+			username = input.next();
+			newHighscore(username,Integer.toString(userHighscore));
+			return highscoreTotal;
+		}
+		catch (Exception e)
+		{
+			System.err.format("Exception occurred trying to read '%s'.", highscore);
+			e.printStackTrace();
+		}
+    		newHighscore(username,Integer.toString(userHighscore));
+		return highscoreTotal;
+    }
+    
+    public void newHighscore(String name, String score) {
+		try {
+			FileWriter highscoreEdit = new FileWriter(highscore, true);		//Second parameter signals appending, not creating
+			PrintWriter highscoreNew = new PrintWriter(highscoreEdit);
+
+			//Decrypt before modification of the file
+			CryptoUtils.decrypt(key, highscore, highscore);
+
+			highscoreNew.printf("%-15s%18s\n", name, score, "");
+			highscoreNew.close();
+
+			//Encrypt again after modification
+			//CryptoUtils.encrypt(key, highscore, highscore);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (CryptoException ex) {
+			System.out.println(ex.getMessage());
+			ex.printStackTrace();
+		}
+	}
    
     public static void main(String[] args) {
         //"Don't change pls" variables
@@ -195,7 +317,7 @@ public class Game {
                 try {
 	                shots = game.fireShot(PATH_DEBUG, GAME_WIDTH, GAME_HEIGHT, path, spawnHeight, player1, blocks, game.missiles, 0, game, background);
 	                if (shots == 2017) {
-	                		game.gameOver(GAME_WIDTH, GAME_HEIGHT);
+	                		game.gameOver(GAME_WIDTH, GAME_HEIGHT, round);
 	                		play = false;
 	                	}
                 } catch (IndexOutOfBoundsException e){
